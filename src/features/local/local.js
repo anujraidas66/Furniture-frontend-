@@ -10,6 +10,18 @@ export const getUserFromLocal = () => {
 }
 
 
+// for add cart set product locally  and in cart product store in array
+
+export const setCartsToLocal = (carts) => {
+    localStorage.setItem('carts',JSON.stringify(carts));
+}
+
+export const getCartsFromLocal = () => {
+    const carts = localStorage.getItem('carts');
+    return carts ? JSON.parse(carts) : [];
+}
+
+
 
 export const removeUserFromLocal = () => {
     localStorage.clear();
@@ -17,13 +29,3 @@ export const removeUserFromLocal = () => {
 
 
 
-// for add cart set product locally  and in cart product store in array
-
-export const setCartsToLocal = (cart) => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-export const getCartsFromLocal = () => {
-    const carts = localStorage.getItem('cart');
-    return carts ? JSON.parse(carts) : []
-}

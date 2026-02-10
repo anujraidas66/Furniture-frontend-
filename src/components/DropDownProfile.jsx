@@ -40,7 +40,8 @@ const adminLists = [
     icon:LayoutDashboard,
     property: 'Admin-panel'
   },
-  
+
+
   {
     icon: LogOutIcon,
     property: 'Sign Out'
@@ -70,7 +71,11 @@ export default function DropDownProfile({user}) {
 
                 case 'Admin-panel':
                  nav('/admin-panel');
-                  break
+                  break;
+
+                case 'Cart':
+                  nav('/cart');
+                  break;
               }
             }
             }

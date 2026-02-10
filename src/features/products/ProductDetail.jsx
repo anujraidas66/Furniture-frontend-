@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useParams } from 'react-router'
 import { useGetProductQuery } from './productApi';
 import { base } from '../../app/mainApi';
@@ -30,3 +30,5 @@ export default function ProductDetail() {
         </div>
     )
 }
+
+

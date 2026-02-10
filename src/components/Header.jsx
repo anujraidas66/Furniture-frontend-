@@ -1,10 +1,14 @@
+
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import DropDownProfile from "./DropDownProfile";
+import { FaCartArrowDown } from "react-icons/fa";
 import { Button } from "./ui/button";
 
 export default function Header() {
   const { user } = useSelector((state) => state.userSlice);
+  const { carts } = useSelector((state) => state.cartSlice);
+  const totalQty = carts.reduce((sum, item) => sum + item.qty, 0);
 
   // Show cart for guests and normal users, hide only for admin
   const showCart = user?.role !== "admin";
@@ -31,11 +35,24 @@ export default function Header() {
             Contact
           </NavLink>
 
-          {showCart && (
-            <NavLink to="/cart" className="text-black">
-              Cart
+
+           {showCart && (
+            <NavLink to="/cart" className="relative text-black">
+              <FaCartArrowDown size={25} />
+              {totalQty > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {totalQty}
+                </span>
+              )}
             </NavLink>
           )}
+
+          {/* {showCart && (
+            <NavLink to="/cart" className="text-black">
+              <FaCartArrowDown size={25} />
+            </NavLink>
+          )} */}
+          
         </div>
 
         {/* Right Section */}

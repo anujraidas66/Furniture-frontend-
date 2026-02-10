@@ -52,9 +52,17 @@ const productApi = mainApi.injectEndpoints({
                 }
             }),
             invalidatesTags:['Product']
-        })
+        }),
+
+        getProductsByCategory:builder.query({
+            query:(category) => ({
+                url:`/products/category/${category}`,
+                method:'GET'
+            }),
+            providesTags:['Product']
+        }),
     })
 })
 
 export const {useGetProductsQuery,useGetProductQuery,
-    useCreateProductMutation,useRemoveProductMutation,useUpdateProductMutation} = productApi;
+    useCreateProductMutation, useGetProductsByCategoryQuery, useRemoveProductMutation,useUpdateProductMutation} = productApi;

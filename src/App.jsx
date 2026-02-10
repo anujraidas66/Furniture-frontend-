@@ -8,6 +8,7 @@ import AdminPanel from './features/admin/AdminPanel.jsx';
 import ProductAddForm from './features/admin/ProductAddForm.jsx';
 import ProductEdit from './features/admin/ProductEdit.jsx';
 import ProductDetail from './features/products/ProductDetail.jsx';
+import Cart from './features/cart/Cart.jsx';
 
 export default function App() {
     const router = createBrowserRouter([
@@ -50,6 +51,12 @@ export default function App() {
                     path:'products/:id',
                     element:<ProductDetail/>
                 },
+
+                {
+                path:'cart',
+                element:<Cart/>
+                },
+
 
                 {
                 path:'shop',
