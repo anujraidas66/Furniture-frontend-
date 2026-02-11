@@ -6,7 +6,7 @@ import { setCart, toggleCart } from "../cart/CartSlice";
 
 export default function AddToCart({ product }) {
   const dispatch = useDispatch();
-
+  const {user} = useSelector((state) => state.userSlice);
   // get cart data
   const { carts } = useSelector((state) => state.cartSlice);
 
@@ -75,6 +75,7 @@ export default function AddToCart({ product }) {
 
       {/* Add to Cart button */}
       <Button
+      disabled = {user?.role === 'admin' || !user}
         onClick={handleAddToCart}
         className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg w-30"
       >

@@ -22,6 +22,8 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
+ 
+
   //update qty (...item) matlab object cart ma j j xha tehi tehi rakh dine but qty lai update garne
   const increaseQty = (item) => {
     if (item.qty < item.stock) {
