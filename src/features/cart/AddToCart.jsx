@@ -73,13 +73,14 @@ export default function AddToCart({ product }) {
       {/* Add to Cart button */}
       <Button
         onClick={handleAddToCart}
-        className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg w-full"
+        className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg w-30"
       >
         Add To Cart
       </Button>
     </div>
   );
 }
+
 
 
 

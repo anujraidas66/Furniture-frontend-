@@ -73,9 +73,9 @@ export default function DropDownProfile({user}) {
                  nav('/admin-panel');
                   break;
 
-                case 'Cart':
-                  nav('/cart');
-                  break;
+                // case 'Cart':
+                //   nav('/cart');
+                //   break;
               }
             }
             }

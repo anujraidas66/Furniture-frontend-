@@ -47,26 +47,6 @@ export default cartSlice.reducer;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import { createSlice } from "@reduxjs/toolkit";
 // import { getCartsFromLocal, setCartsToLocal } from "../local/local";
 
