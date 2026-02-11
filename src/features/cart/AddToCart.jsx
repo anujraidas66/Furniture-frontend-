@@ -38,6 +38,7 @@ export default function AddToCart({ product }) {
         title: product.title,
         price: product.price,
         stock: product.stock,
+        category: product.category,
         image: product.image,
         qty: qty,
       })
@@ -69,6 +70,8 @@ export default function AddToCart({ product }) {
           <PlusIcon size={16} />
         </Button>
       </div>
+
+
 
       {/* Add to Cart button */}
       <Button

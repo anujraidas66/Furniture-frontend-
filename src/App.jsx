@@ -9,6 +9,7 @@ import ProductAddForm from './features/admin/ProductAddForm.jsx';
 import ProductEdit from './features/admin/ProductEdit.jsx';
 import ProductDetail from './features/products/ProductDetail.jsx';
 import Cart from './features/cart/Cart.jsx';
+import CheckOut from './features/checkout/CheckOut.jsx';
 
 export default function App() {
     const router = createBrowserRouter([
@@ -55,6 +56,11 @@ export default function App() {
                 {
                 path:'cart',
                 element:<Cart/>
+                },
+
+                {
+                    path: 'checkOut',
+                    element:<CheckOut/>
                 },
 
 

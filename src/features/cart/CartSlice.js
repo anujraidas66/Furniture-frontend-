@@ -32,7 +32,7 @@ export const cartSlice = createSlice({
       state.isOpen = action.payload; // true = open, false = close
     },
 
-    // 🆕 Remove product from cart
+    // 🆕 Remove product from cart 
     removeCart: (state, action) => {
       state.carts = state.carts.filter(cart => cart.id !== action.payload);
       setCartsToLocal(state.carts);
