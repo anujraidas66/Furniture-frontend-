@@ -68,6 +68,7 @@ export default function CartDrawer() {
 
           {/* Direct Checkout */}
           <button
+          disabled={carts.length === 0}
             onClick={() => {
               dispatch(toggleCart(false));
               nav("/checkout");

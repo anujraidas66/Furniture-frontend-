@@ -19,6 +19,10 @@ const userLists = [
     icon: UserIcon,
     property: 'Profile'
   },
+   {
+    icon: CreditCardIcon,
+    property: 'My Orders'   // ✅ ADD THIS
+  },
   {
     icon: ShoppingCart,
     property: 'Cart'
@@ -36,11 +40,15 @@ const adminLists = [
     icon: UserIcon,
     property: 'Profile'
   },
+    {
+    icon: ShoppingCart,
+    property: 'Admin-orders'   // ✅ ADD THIS
+  },
+
   {
     icon:LayoutDashboard,
     property: 'Admin-panel'
   },
-
 
   {
     icon: LogOutIcon,
@@ -73,9 +81,17 @@ export default function DropDownProfile({user}) {
                  nav('/admin-panel');
                   break;
 
+                      case 'Admin-orders':     // ✅ ADD THIS
+                      nav('/admin-orders');
+                      break;
+
                 case 'Cart':
                   nav('/cart');
                   break;
+
+                   case 'My Orders':      // ✅ Navigate to user orders page
+                    nav('/user-orders');
+                    break;
               }
             }
             }

@@ -1,13 +1,15 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { removeCart, toggleCart } from "../cart/CartSlice";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useCreateOrderMutation } from "../orders/OrderApi";
+import { removeCart } from "../cart/CartSlice"; // to clear cart after order
 
 export default function CheckOut() {
-  const { carts } = useSelector(state => state.cartSlice);
   const dispatch = useDispatch();
-  const nav = useNavigate();
+  const { carts } = useSelector(state => state.cartSlice); // cart items
+  const { user } = useSelector(state => state.userSlice); // logged-in user
+
+  const [createOrder] = useCreateOrderMutation();
 
   const [billingDetails, setBillingDetails] = useState({
     firstName: "",
@@ -16,194 +18,145 @@ export default function CheckOut() {
     country: "",
     streetAddress: "",
     city: "",
-    province: "",
-    zipCode: "",
     phone: "",
-    email: "",
-    comment: "",
+    province: "baghmati",
+    zipCode: "",
+    email: user?.email || "",
+    comment: ""
   });
 
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
 
-  const [createOrder, { isLoading }] = useCreateOrderMutation();
-
-  const totalAmount = carts.reduce((sum, item) => sum + item.price * item.qty, 0);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setBillingDetails(prev => ({ ...prev, [name]: value }));
-  };
+  // calculate total amount
+  const totalAmount = carts.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   const handlePlaceOrder = async () => {
-    if (carts.length === 0) return alert("Cart is empty!");
+    if (carts.length === 0) return toast.error("Cart is empty!");
+    if (!user?.token) return toast.error("You must be logged in!");
 
     try {
       await createOrder({
-        token: localStorage.getItem("token"),
+        token: user.token, // ✅ use token from Redux
         body: {
           totalAmount,
-          products: carts.map(item => ({ productId: item.id, quantity: item.qty })),
+          products: carts.map(item => ({
+            productId: item.id,
+            quantity: item.qty
+          })),
           billingDetails,
-          paymentMethod,
-        },
+          paymentMethod
+        }
       }).unwrap();
 
-      // Clear cart
-      carts.forEach(item => dispatch(removeCart(item.id)));
-      dispatch(toggleCart(false));
+      toast.success("Order placed successfully!");
 
-      alert("Order placed successfully!");
-      nav("/"); // redirect to home or confirmation page
+      // clear cart in Redux & localStorage
+      carts.forEach(item => dispatch(removeCart(item.id)));
+
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong!");
+      console.log(err);
+      toast.error(err?.data?.message || "Order failed!");
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
-      {/* Billing Form */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold mb-4">Billing Details</h2>
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Checkout</h1>
 
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            name="firstName"
-            placeholder="First Name"
-            value={billingDetails.firstName}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-          />
-          <input
-            name="lastName"
-            placeholder="Last Name"
-            value={billingDetails.lastName}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-          />
-        </div>
-
+      <h2 className="font-semibold mb-2">Billing Details</h2>
+      <form className="space-y-2">
         <input
-          name="companyName"
-          placeholder="Company Name (Optional)"
+          placeholder="First Name"
+          value={billingDetails.firstName}
+          onChange={e => setBillingDetails({ ...billingDetails, firstName: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Last Name"
+          value={billingDetails.lastName}
+          onChange={e => setBillingDetails({ ...billingDetails, lastName: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="Company Name (optional)"
           value={billingDetails.companyName}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
+          onChange={e => setBillingDetails({ ...billingDetails, companyName: e.target.value })}
+          className="border p-2 w-full rounded"
         />
-
         <input
-          name="country"
-          placeholder="Country / Region"
-          value={billingDetails.country}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-        />
-
-        <input
-          name="streetAddress"
           placeholder="Street Address"
           value={billingDetails.streetAddress}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
+          onChange={e => setBillingDetails({ ...billingDetails, streetAddress: e.target.value })}
+          className="border p-2 w-full rounded"
         />
-
         <input
-          name="city"
-          placeholder="Town / City"
+          placeholder="City"
           value={billingDetails.city}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
+          onChange={e => setBillingDetails({ ...billingDetails, city: e.target.value })}
+          className="border p-2 w-full rounded"
         />
-
         <input
-          name="province"
-          placeholder="Province"
-          value={billingDetails.province}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-        />
-
-        <input
-          name="zipCode"
-          placeholder="ZIP Code"
-          value={billingDetails.zipCode}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-        />
-
-        <input
-          name="phone"
           placeholder="Phone"
           value={billingDetails.phone}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
+          onChange={e => setBillingDetails({ ...billingDetails, phone: e.target.value })}
+          className="border p-2 w-full rounded"
         />
-
         <input
-          name="email"
-          placeholder="Email Address"
+          placeholder="Email"
           value={billingDetails.email}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
+          onChange={e => setBillingDetails({ ...billingDetails, email: e.target.value })}
+          className="border p-2 w-full rounded"
         />
+        <input
+          placeholder="Country"
+          value={billingDetails.country}
+          onChange={e => setBillingDetails({ ...billingDetails, country: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          placeholder="ZIP Code"
+          value={billingDetails.zipCode}
+          onChange={e => setBillingDetails({ ...billingDetails, zipCode: e.target.value })}
+          className="border p-2 w-full rounded"
+        />
+        <select
+          value={billingDetails.province}
+          onChange={e => setBillingDetails({ ...billingDetails, province: e.target.value })}
+          className="border p-2 w-full rounded"
+        >
+          <option value="koshi">Koshi</option>
+          <option value="baghmati">Baghmati</option>
+          <option value="madesh">Madesh</option>
+          <option value="lumbini">Lumbini</option>
+          <option value="sudurpachhim">Sudurpachhim</option>
+          <option value="gandaki">Gandaki</option>
+          <option value="karnali">Karnali</option>
+        </select>
 
         <textarea
-          name="comment"
-          placeholder="Additional Information"
+          placeholder="Comment"
           value={billingDetails.comment}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
+          onChange={e => setBillingDetails({ ...billingDetails, comment: e.target.value })}
+          className="border p-2 w-full rounded"
         />
 
-        {/* Payment Method */}
-        <div className="mt-4 space-y-2">
-          <h3 className="font-semibold">Payment Method</h3>
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              value="Direct Bank"
-              checked={paymentMethod === "Direct Bank"}
-              onChange={() => setPaymentMethod("Direct Bank")}
-            />
-            Direct Bank Transfer
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              value="Cash on Delivery"
-              checked={paymentMethod === "Cash on Delivery"}
-              onChange={() => setPaymentMethod("Cash on Delivery")}
-            />
-            Cash on Delivery
-          </label>
-        </div>
+        <select
+          value={paymentMethod}
+          onChange={e => setPaymentMethod(e.target.value)}
+          className="border p-2 w-full rounded"
+        >
+          <option value="Cash on Delivery">Cash on Delivery</option>
+          <option value="Direct Bank">Direct Bank</option>
+        </select>
 
         <button
+          type="button"
           onClick={handlePlaceOrder}
-          className="mt-6 w-full bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded font-semibold"
+          className="w-full bg-black text-white p-3 rounded mt-4"
         >
-          Place Order
+          Place Order (Rs. {totalAmount})
         </button>
-      </div>
-
-      {/* Order Summary */}
-      <div className="bg-gray-100 p-6 rounded-md space-y-4">
-        <h2 className="text-2xl font-bold mb-4">Your Order</h2>
-
-        {carts.map(item => (
-          <div key={item.id} className="flex justify-between">
-            <span>{item.title} x {item.qty}</span>
-            <span>Rs. {item.price * item.qty}</span>
-          </div>
-        ))}
-
-        <hr className="my-2" />
-
-        <div className="flex justify-between font-bold text-lg">
-          <span>Total</span>
-          <span>Rs. {totalAmount}</span>
-        </div>
-      </div>
+      </form>
     </div>
   );
 }

@@ -170,6 +170,7 @@ export default function CartPage() {
     </div>
 
     <button
+    disabled={carts.length === 0}
       onClick={() => nav("/checkout")}
       className="w-full border border-black py-3 rounded-lg font-medium hover:bg-black hover:text-white transition"
     >
