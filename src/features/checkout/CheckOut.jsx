@@ -3,12 +3,13 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useCreateOrderMutation } from "../orders/OrderApi";
 import { removeCart } from "../cart/CartSlice"; // to clear cart after order
+import { useNavigate } from "react-router";
 
 export default function CheckOut() {
   const dispatch = useDispatch();
   const { carts } = useSelector(state => state.cartSlice); // cart items
   const { user } = useSelector(state => state.userSlice); // logged-in user
-
+  const nav = useNavigate();
   const [createOrder] = useCreateOrderMutation();
 
   const [billingDetails, setBillingDetails] = useState({
@@ -52,7 +53,7 @@ export default function CheckOut() {
 
       // clear cart in Redux & localStorage
       carts.forEach(item => dispatch(removeCart(item.id)));
-
+      nav('/');
     } catch (err) {
       console.log(err);
       toast.error(err?.data?.message || "Order failed!");
@@ -160,3 +161,4 @@ export default function CheckOut() {
     </div>
   );
 }
+

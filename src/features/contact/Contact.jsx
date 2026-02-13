@@ -1,63 +1,116 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useCreateContactMutation } from "./contactApi";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-hot-toast";
-import { useCreateContactMutation } from "../features/contact/ContactApi";
+import { useNavigate } from "react-router";
 
 export default function Contact() {
   const { user } = useSelector(state => state.userSlice);
-  const [createContact] = useCreateContactMutation();
+  const [createContact, { isLoading }] = useCreateContactMutation();
+  const nav = useNavigate();
+  const formik = useFormik({
+    initialValues: {
+      subject: "",
+      message: ""
+    },
+    validationSchema: Yup.object({
+      subject: Yup.string()
+        .trim()
+        .min(5, "Subject must be at least 5 characters")
+        .max(100, "Subject too long")
+        .required("Subject is required"),
+      message: Yup.string()
+        .trim()
+        .min(10, "Message must be at least 10 characters")
+        .max(1000, "Message too long")
+        .required("Message is required")
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await createContact({
+          token: user?.token,
+          body: {
+            subject: values.subject,
+            message: values.message
+          }
+        }).unwrap();
 
-  const [form, setForm] = useState({
-    subject: "",
-    message: ""
+        toast.success("Message sent successfully ✅");
+        resetForm();
+        nav('/');
+      } catch (err) {
+        toast.error(err?.data?.message || "Failed ❌");
+      }
+    }
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      await createContact({
-        token: user?.token,
-        body: form
-      }).unwrap();
-
-      toast.success("Message sent successfully ✅");
-
-      setForm({ subject: "", message: "" });
-
-    } catch (err) {
-      toast.error(err?.data?.message || "Failed ❌");
-    }
-  };
-
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-sm">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Contact Us
+        </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Subject"
-          className="w-full border p-2 rounded"
-          value={form.subject}
-          onChange={(e) => setForm({ ...form, subject: e.target.value })}
-        />
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
 
-        <textarea
-          placeholder="Your message..."
-          className="w-full border p-2 rounded"
-          rows="5"
-          value={form.message}
-          onChange={(e) => setForm({ ...form, message: e.target.value })}
-        />
+          {/* Subject */}
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Subject
+            </label>
+            <input
+              type="text"
+              name="subject"
+              placeholder="Enter subject"
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+              value={formik.values.subject}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.subject && formik.errors.subject && (
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.subject}
+              </p>
+            )}
+          </div>
 
-        <button
-          type="submit"
-          className="bg-black text-white px-4 py-2 rounded"
-        >
-          Send Message
-        </button>
-      </form>
+          {/* Message */}
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Message
+            </label>
+            <textarea
+              name="message"
+              rows="4"
+              placeholder="Write your message..."
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+              value={formik.values.message}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.message && formik.errors.message && (
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.message}
+              </p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`w-full py-3 rounded-xl border border-black transition ${
+              isLoading
+                ? "bg-gray-300 cursor-not-allowed"
+                : "hover:bg-black hover:text-white"
+            }`}
+          >
+            {isLoading ? "Sending..." : "Submit"}
+          </button>
+
+        </form>
+      </div>
     </div>
   );
 }

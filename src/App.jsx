@@ -12,6 +12,8 @@ import Cart from './features/cart/Cart.jsx';
 import CheckOut from './features/checkout/CheckOut.jsx';
 import AdminOrders from './features/admin/AdminOrders.jsx';
 import UserOrder from './features/profile/UserOrder.jsx';
+import Contact from './features/contact/Contact.jsx';
+import AdminContactReply from './features/admin/AdminContactReply.jsx';
 
 export default function App() {
     const router = createBrowserRouter([
@@ -73,6 +75,16 @@ export default function App() {
                 {
                     path: 'user-orders',
                     element:<UserOrder/>
+                },
+
+                {
+                    path: 'contact',
+                    element:<Contact/>
+                },
+
+                {
+                    path:'admin-contact',
+                    element:<AdminContactReply/>
                 },
 
 

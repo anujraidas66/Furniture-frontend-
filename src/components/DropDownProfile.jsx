@@ -1,5 +1,5 @@
 
-import { UserIcon, SettingsIcon, BellIcon, LogOutIcon, CreditCardIcon, ShoppingCart, LayoutDashboard } from 'lucide-react'
+import { UserIcon, SettingsIcon, BellIcon, LogOutIcon, CreditCardIcon, ShoppingCart, LayoutDashboard, MailIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -50,6 +50,9 @@ const adminLists = [
     property: 'Admin-panel'
   },
 
+ { icon: MailIcon, 
+  property: 'Admin Contact' },
+
   {
     icon: LogOutIcon,
     property: 'Sign Out'
@@ -75,6 +78,7 @@ export default function DropDownProfile({user}) {
               switch(item.property){
                 case 'Sign Out':
                 dispatch(removeUser());
+                nav('/');
                 break;
 
                 case 'Admin-panel':
@@ -84,6 +88,10 @@ export default function DropDownProfile({user}) {
                       case 'Admin-orders':     // ✅ ADD THIS
                       nav('/admin-orders');
                       break;
+
+                    case 'Admin Contact':  // ✅ Navigate to admin contact page
+                    nav('/admin-contact')
+                    break
 
                 case 'Cart':
                   nav('/cart');

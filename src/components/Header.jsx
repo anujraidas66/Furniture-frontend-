@@ -30,12 +30,13 @@ export default function Header() {
           <NavLink to="/account" className="text-black">
             Account
           </NavLink>
+          
+{/* Show Contact only for normal users, not for admin */}
+  {user?.role !== "admin" && (
+    <NavLink to="/contact" className="text-black">Contact</NavLink>
+  )}
 
-          <NavLink to="/contact" className="text-black">
-            Contact
-          </NavLink>
-
-
+ 
            {showCart && (
             <NavLink to="/cart" className="relative text-black">
               <FaCartArrowDown size={25} />
