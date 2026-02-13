@@ -165,13 +165,16 @@
 //     </div>
 //   );
 // }
+
+
 import { useSelector, useDispatch } from "react-redux";
 import { useCreateOrderMutation } from "../orders/OrderApi";
-import { removeCart } from "../cart/CartSlice";
+
 import { useNavigate } from "react-router";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-hot-toast";
+import { clearCart } from "../cart/CartSlice";
 
 export default function CheckOut() {
   const dispatch = useDispatch();
@@ -193,9 +196,7 @@ export default function CheckOut() {
     phone: Yup.string()
       .matches(/^[0-9]{7,15}$/, "Phone must be valid")
       .required("Phone is required"),
-    email: Yup.string()
-      .email("Invalid email")
-      .required("Email is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
     country: Yup.string().required("Country is required"),
     zipCode: Yup.string().required("ZIP code is required"),
     province: Yup.string().required("Province is required"),
@@ -204,7 +205,6 @@ export default function CheckOut() {
 
   return (
     <div className="m-0 p-0">
-
       {/* ================= BANNER ================= */}
       <div className="relative w-full h-80 overflow-hidden">
         <img
@@ -213,29 +213,18 @@ export default function CheckOut() {
           className="absolute inset-0 w-full h-full object-cover blur-[3px]"
         />
         <div className="absolute inset-0 bg-white/40"></div>
-
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center">
-          <img
-            src="./image/meubalhouse.png"
-            alt="Logo"
-            className="w-16 h-16 mb-4"
-          />
-          <h1 className="text-5xl font-medium text-black">
-            Checkout
-          </h1>
+          <img src="./image/meubalhouse.png" alt="Logo" className="w-16 h-16 mb-4" />
+          <h1 className="text-5xl font-medium text-black">Checkout</h1>
           <div className="flex items-center gap-2 mt-4 text-base">
-            <span className="font-medium text-black cursor-pointer">
-              Home
-            </span>
+            <span className="font-medium text-black cursor-pointer">Home</span>
             <span>›</span>
-            <span className="font-light text-black">
-              Checkout
-            </span>
+            <span className="font-light text-black">Checkout</span>
           </div>
         </div>
       </div>
 
-      {/* ================= CHECKOUT SECTION ================= */}
+      {/* ================= CHECKOUT FORM ================= */}
       <div className="max-w-6xl mx-auto px-6 py-16">
         <Formik
           initialValues={{
@@ -254,12 +243,11 @@ export default function CheckOut() {
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            if (carts.length === 0)
-              return toast.error("Cart is empty!");
-            if (!user?.token)
-              return toast.error("You must be logged in!");
+            if (carts.length === 0) return toast.error("Cart is empty!");
+            if (!user?.token) return toast.error("You must be logged in!");
 
             try {
+              // Create order API call
               await createOrder({
                 token: user.token,
                 body: {
@@ -267,40 +255,30 @@ export default function CheckOut() {
                   products: carts.map((item) => ({
                     productId: item.id,
                     quantity: item.qty,
+                    color: item.color,
+                    size: item.size,
                   })),
                   billingDetails: values,
                   paymentMethod: values.paymentMethod,
                 },
               }).unwrap();
 
+              // Clear cart after successful order
+              dispatch(clearCart());
+
               toast.success("Order placed successfully!");
-
-              carts.forEach((item) =>
-                dispatch(removeCart(item.id))
-              );
-
               nav("/");
             } catch (err) {
               toast.error(err?.data?.message || "Order failed!");
             }
           }}
         >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            errors,
-            touched,
-          }) => (
+          {({ handleSubmit, handleChange, values, errors, touched }) => (
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-
-                {/* LEFT SIDE - BILLING */}
+                {/* LEFT - BILLING DETAILS */}
                 <div>
-                  <h2 className="text-2xl font-semibold mb-6">
-                    Billing details
-                  </h2>
-
+                  <h2 className="text-2xl font-semibold mb-6">Billing details</h2>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <input
@@ -311,12 +289,9 @@ export default function CheckOut() {
                         className="border p-3 w-full rounded"
                       />
                       {touched.firstName && errors.firstName && (
-                        <p className="text-red-500 text-sm">
-                          {errors.firstName}
-                        </p>
+                        <p className="text-red-500 text-sm">{errors.firstName}</p>
                       )}
                     </div>
-
                     <div>
                       <input
                         name="lastName"
@@ -326,9 +301,7 @@ export default function CheckOut() {
                         className="border p-3 w-full rounded"
                       />
                       {touched.lastName && errors.lastName && (
-                        <p className="text-red-500 text-sm">
-                          {errors.lastName}
-                        </p>
+                        <p className="text-red-500 text-sm">{errors.lastName}</p>
                       )}
                     </div>
                   </div>
@@ -340,7 +313,6 @@ export default function CheckOut() {
                     value={values.companyName}
                     className="border p-3 w-full rounded mt-4"
                   />
-
                   <input
                     name="country"
                     placeholder="Country / Region"
@@ -348,7 +320,6 @@ export default function CheckOut() {
                     value={values.country}
                     className="border p-3 w-full rounded mt-4"
                   />
-
                   <input
                     name="streetAddress"
                     placeholder="Street address"
@@ -356,7 +327,6 @@ export default function CheckOut() {
                     value={values.streetAddress}
                     className="border p-3 w-full rounded mt-4"
                   />
-
                   <input
                     name="city"
                     placeholder="Town / City"
@@ -364,11 +334,10 @@ export default function CheckOut() {
                     value={values.city}
                     className="border p-3 w-full rounded mt-4"
                   />
-
                   <select
                     name="province"
-                    onChange={handleChange}
                     value={values.province}
+                    onChange={handleChange}
                     className="border p-3 w-full rounded mt-4"
                   >
                     <option value="">Select Province</option>
@@ -380,7 +349,6 @@ export default function CheckOut() {
                     <option value="gandaki">Gandaki</option>
                     <option value="karnali">Karnali</option>
                   </select>
-
                   <input
                     name="zipCode"
                     placeholder="ZIP Code"
@@ -388,7 +356,6 @@ export default function CheckOut() {
                     value={values.zipCode}
                     className="border p-3 w-full rounded mt-4"
                   />
-
                   <input
                     name="phone"
                     placeholder="Phone"
@@ -396,7 +363,6 @@ export default function CheckOut() {
                     value={values.phone}
                     className="border p-3 w-full rounded mt-4"
                   />
-
                   <input
                     name="email"
                     placeholder="Email address"
@@ -404,7 +370,6 @@ export default function CheckOut() {
                     value={values.email}
                     className="border p-3 w-full rounded mt-4"
                   />
-
                   <textarea
                     name="comment"
                     placeholder="Additional information"
@@ -414,24 +379,15 @@ export default function CheckOut() {
                   />
                 </div>
 
-                {/* RIGHT SIDE - SUMMARY */}
+                {/* RIGHT - ORDER SUMMARY */}
                 <div>
-                  <h2 className="text-2xl font-semibold mb-6">
-                    Product
-                  </h2>
+                  <h2 className="text-2xl font-semibold mb-6">Your Order</h2>
 
                   <div className="border-b pb-4">
                     {carts.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex justify-between text-sm mb-2"
-                      >
-                        <span>
-                          {item.title} × {item.qty}
-                        </span>
-                        <span>
-                          Rs. {item.price * item.qty}
-                        </span>
+                      <div key={`${item.id}-${item.color}-${item.size}`} className="flex justify-between text-sm mb-2">
+                        <span>{item.title} × {item.qty} ({item.color}, {item.size})</span>
+                        <span>Rs. {item.price * item.qty}</span>
                       </div>
                     ))}
                   </div>
@@ -446,30 +402,24 @@ export default function CheckOut() {
                     <span>Rs. {totalAmount}</span>
                   </div>
 
+                  {/* Payment method */}
                   <div className="mt-6 space-y-3">
                     <label className="flex items-center gap-2">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="Direct Bank Transfer"
-                        checked={
-                          values.paymentMethod ===
-                          "Direct Bank Transfer"
-                        }
+                        checked={values.paymentMethod === "Direct Bank Transfer"}
                         onChange={handleChange}
                       />
                       Direct Bank Transfer
                     </label>
-
                     <label className="flex items-center gap-2">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value="Cash on Delivery"
-                        checked={
-                          values.paymentMethod ===
-                          "Cash on Delivery"
-                        }
+                        checked={values.paymentMethod === "Cash on Delivery"}
                         onChange={handleChange}
                       />
                       Cash On Delivery
@@ -481,9 +431,7 @@ export default function CheckOut() {
                     disabled={isLoading}
                     className="mt-8 w-full border border-black py-3 rounded hover:bg-black hover:text-white transition disabled:opacity-50"
                   >
-                    {isLoading
-                      ? "Placing Order..."
-                      : "Place order"}
+                    {isLoading ? "Placing Order..." : "Place order"}
                   </button>
                 </div>
               </div>
@@ -496,34 +444,20 @@ export default function CheckOut() {
       <div className="bg-[#F9F1E7] py-16">
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           <div>
-            <h3 className="text-xl font-semibold mb-3">
-              Free Delivery
-            </h3>
-            <p className="text-gray-500 text-sm">
-              For all orders over $50, consectetur adipiscing elit.
-            </p>
+            <h3 className="text-xl font-semibold mb-3">Free Delivery</h3>
+            <p className="text-gray-500 text-sm">For all orders over $50.</p>
           </div>
-
           <div>
-            <h3 className="text-xl font-semibold mb-3">
-              90 Days Return
-            </h3>
-            <p className="text-gray-500 text-sm">
-              If goods have problems, consectetur adipiscing elit.
-            </p>
+            <h3 className="text-xl font-semibold mb-3">90 Days Return</h3>
+            <p className="text-gray-500 text-sm">If goods have problems.</p>
           </div>
-
           <div>
-            <h3 className="text-xl font-semibold mb-3">
-              Secure Payment
-            </h3>
-            <p className="text-gray-500 text-sm">
-              100% secure payment, consectetur adipiscing elit.
-            </p>
+            <h3 className="text-xl font-semibold mb-3">Secure Payment</h3>
+            <p className="text-gray-500 text-sm">100% secure payment.</p>
           </div>
         </div>
       </div>
-
     </div>
   );
 }
+
