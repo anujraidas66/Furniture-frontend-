@@ -1,116 +1,184 @@
-import { useSelector } from "react-redux";
-import { useCreateContactMutation } from "./contactApi";
-import { useFormik } from "formik";
+import { Spinner } from "@/components/ui/spinner";
+import { Formik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-hot-toast";
+import { useCreateContactMutation } from "./contactApi";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 
-export default function Contact() {
-  const { user } = useSelector(state => state.userSlice);
+const contactSchema = Yup.object({
+  subject: Yup.string()
+    .min(5, "Subject must be at least 5 characters")
+    .max(100, "Subject too long")
+    .required("Subject is required"),
+
+  message: Yup.string()
+    .min(10, "Message must be at least 10 characters")
+    .max(1000, "Message too long")
+    .required("Message is required"),
+});
+
+export default function ContactPage() {
+  const { user } = useSelector((state) => state.userSlice);
   const [createContact, { isLoading }] = useCreateContactMutation();
   const nav = useNavigate();
-  const formik = useFormik({
-    initialValues: {
-      subject: "",
-      message: ""
-    },
-    validationSchema: Yup.object({
-      subject: Yup.string()
-        .trim()
-        .min(5, "Subject must be at least 5 characters")
-        .max(100, "Subject too long")
-        .required("Subject is required"),
-      message: Yup.string()
-        .trim()
-        .min(10, "Message must be at least 10 characters")
-        .max(1000, "Message too long")
-        .required("Message is required")
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        await createContact({
-          token: user?.token,
-          body: {
-            subject: values.subject,
-            message: values.message
-          }
-        }).unwrap();
-
-        toast.success("Message sent successfully ✅");
-        resetForm();
-        nav('/');
-      } catch (err) {
-        toast.error(err?.data?.message || "Failed ❌");
-      }
-    }
-  });
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-sm">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
-          Contact Us
-        </h2>
+    <div className="w-full">
 
-        <form onSubmit={formik.handleSubmit} className="space-y-6">
+      {/* ================= BANNER ================= */}
+      <div className="relative w-full h-80 overflow-hidden">
+        <img
+          src="./image/checkout.jpg"
+          alt="Contact Banner"
+          className="absolute inset-0 w-full h-full object-cover blur-sm"
+        />
+        <div className="absolute inset-0 bg-white/40"></div>
 
-          {/* Subject */}
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Subject
-            </label>
-            <input
-              type="text"
-              name="subject"
-              placeholder="Enter subject"
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
-              value={formik.values.subject}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.subject && formik.errors.subject && (
-              <p className="text-red-500 text-sm mt-1">
-                {formik.errors.subject}
-              </p>
-            )}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center">
+          <img
+            src="./image/meubalhouse.png"
+            alt="Logo"
+            className="w-16 h-16 mb-4"
+          />
+          <h1 className="text-5xl font-medium text-black">Contact Us</h1>
+          <div className="flex items-center gap-2 mt-4 text-base">
+            <span
+              onClick={() => nav("/")}
+              className="font-medium text-black cursor-pointer"
+            >
+              Home
+            </span>
+            <span>›</span>
+            <span className="font-light text-black">Contact</span>
           </div>
-
-          {/* Message */}
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Message
-            </label>
-            <textarea
-              name="message"
-              rows="4"
-              placeholder="Write your message..."
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
-              value={formik.values.message}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.message && formik.errors.message && (
-              <p className="text-red-500 text-sm mt-1">
-                {formik.errors.message}
-              </p>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full py-3 rounded-xl border border-black transition ${
-              isLoading
-                ? "bg-gray-300 cursor-not-allowed"
-                : "hover:bg-black hover:text-white"
-            }`}
-          >
-            {isLoading ? "Sending..." : "Submit"}
-          </button>
-
-        </form>
+        </div>
       </div>
+
+      {/* ================= CONTACT FORM ================= */}
+      <div className="bg-gray-100 py-20">
+        <div className="max-w-xl mx-auto px-6">
+          <Formik
+            initialValues={{
+              subject: "",
+              message: "",
+            }}
+            validationSchema={contactSchema}
+            onSubmit={async (values, { resetForm }) => {
+              try {
+                await createContact({
+                  token: user?.token,
+                  body: {
+                    subject: values.subject,
+                    message: values.message,
+                  },
+                }).unwrap();
+
+                toast.success("Message sent successfully ✅");
+                resetForm();
+                nav("/");
+              } catch (err) {
+                toast.error(err?.data?.message || "Failed ❌");
+              }
+            }}
+          >
+            {({ handleSubmit, handleChange, values, touched, errors }) => (
+              <form
+                onSubmit={handleSubmit}
+                className="bg-white p-10 rounded-xl shadow-sm flex flex-col gap-6"
+              >
+                {/* Subject */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    name="subject"
+                    placeholder="This is optional"
+                    value={values.subject}
+                    onChange={handleChange}
+                    className="border rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-black"
+                  />
+                  {touched.subject && errors.subject && (
+                    <p className="text-red-500 text-sm">
+                      {errors.subject}
+                    </p>
+                  )}
+                </div>
+
+                {/* Message */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Message
+                  </label>
+                  <textarea
+                    name="message"
+                    rows="5"
+                    placeholder="Hi! I'd like to ask about"
+                    value={values.message}
+                    onChange={handleChange}
+                    className="border rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-black resize-none"
+                  />
+                  {touched.message && errors.message && (
+                    <p className="text-red-500 text-sm">
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Submit */}
+                {isLoading ? (
+                  <button
+                    disabled
+                    className="border rounded-lg py-3 font-medium flex justify-center items-center gap-2"
+                  >
+                    <Spinner />
+                    Sending...
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="border border-black rounded-lg py-3 font-medium hover:bg-black hover:text-white transition"
+                  >
+                    Submit
+                  </button>
+                )}
+              </form>
+            )}
+          </Formik>
+        </div>
+      </div>
+
+      {/* ================= FEATURE SECTION ================= */}
+      <div className="bg-[#F9F1E7] py-16">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+          <div>
+            <h3 className="text-xl font-semibold mb-3">Free Delivery</h3>
+            <p className="text-gray-500 text-sm">
+              For all orders over $50, consectetur adipiscing elit.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-3">90 Days Return</h3>
+            <p className="text-gray-500 text-sm">
+              If goods have problems, consectetur adipiscing elit.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-3">Secure Payment</h3>
+            <p className="text-gray-500 text-sm">
+              100% secure payment, consectetur adipiscing elit.
+            </p>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
+
+
+
