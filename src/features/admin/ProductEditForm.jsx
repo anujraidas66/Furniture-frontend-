@@ -18,6 +18,7 @@ const valSchema = Yup.object({
   price: Yup.number().required("Price is required"),
   stock: Yup.number().required("Stock is required"),
   category: Yup.string().required("Category is required"),
+  rating: Yup.number().required("Rating is required"),
 })
 
 export default function ProductEditForm({ product }) {
@@ -39,6 +40,7 @@ export default function ProductEditForm({ product }) {
             price: product.price,
             stock: product.stock,
             category: product.category,
+            rating: product.rating,
             colors: product.colors || [],
             sizes: product.sizes || [],
             images: [],
@@ -52,6 +54,7 @@ export default function ProductEditForm({ product }) {
               formData.append('price', values.price)
               formData.append('stock', values.stock)
               formData.append('category', values.category)
+              formData.append('rating', values.rating)
               formData.append('colors', JSON.stringify(values.colors))
               formData.append('sizes', JSON.stringify(values.sizes))
               values.images.forEach(f => formData.append('images', f))
@@ -85,6 +88,11 @@ export default function ProductEditForm({ product }) {
               <div className="grid gap-2">
                 <Label>Stock</Label>
                 <Input type="number" name="stock" value={values.stock} onChange={handleChange}/>
+              </div>
+
+              <div className="grid gap-2">
+                <Label>Rating</Label>
+                <Input type="number" name="rating" value={values.rating} onChange={handleChange}/>
               </div>
 
               <div className="grid gap-2">

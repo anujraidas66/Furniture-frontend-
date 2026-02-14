@@ -18,6 +18,7 @@ const valSchema = Yup.object({
   stock: Yup.number().required("Stock is required"),
   colors: Yup.array().min(1, "Select at least one color"),
   sizes: Yup.array().min(1, "Select at least one size"),
+  rating: Yup.number().required("Rating is required"),
   category: Yup.string().required("Category is required"),
   images: Yup.mixed()
     .test('fileType', 'Unsupported File Format', (val) => {
@@ -52,6 +53,7 @@ export default function ProductAddForm() {
             price: '',
             stock: '',
             category: '',
+            rating: '',
             colors: [],
             sizes: [],
             images: [],
@@ -65,6 +67,7 @@ export default function ProductAddForm() {
               formData.append('price', values.price)
               formData.append('stock', values.stock)
               formData.append('category', values.category)
+              formData.append('rating', values.rating)
               formData.append('colors', JSON.stringify(values.colors))
               formData.append('sizes', JSON.stringify(values.sizes))
               values.images.forEach(file => formData.append('images', file))
@@ -104,6 +107,13 @@ export default function ProductAddForm() {
                 <Label htmlFor='stock'>Stock</Label>
                 <Input type='number' name='stock' value={values.stock} onChange={handleChange} placeholder='Product stock'/>
                 {touched.stock && errors.stock && <p className='text-red-500'>{errors.stock}</p>}
+              </div>
+
+              {/* Rating */}
+              <div className='grid gap-2'>
+                <Label htmlFor='rating'>Rating</Label>
+                <Input type='number' name='rating' value={values.rating} onChange={handleChange} placeholder='Rating'/>
+                {touched.rating && errors.rating && <p className='text-red-500'>{errors.rating}</p>}
               </div>
 
               {/* Category */}

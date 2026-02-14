@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useGetProductQuery } from './productApi';
 import { base } from '../../app/mainApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCart } from '../cart/CartSlice';
 import toast from 'react-hot-toast';
 
@@ -10,8 +10,8 @@ export default function ProductDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { isLoading, error, data } = useGetProductQuery(id);
-
   const [mainImage, setMainImage] = useState(null);
+  const {user}  = useSelector(state => state.userSlice);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [qty, setQty] = useState(1);
@@ -126,7 +126,8 @@ export default function ProductDetail() {
         </div>
 
         {/* Add to Cart */}
-        <button
+        <button 
+        disabled={user.role === 'admin'}
           onClick={handleAddToCart}
           className="bg-yellow-400 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition"
         >
