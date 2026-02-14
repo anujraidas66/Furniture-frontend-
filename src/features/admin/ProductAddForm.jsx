@@ -18,8 +18,9 @@ const valSchema = Yup.object({
   stock: Yup.number().required("Stock is required"),
   colors: Yup.array().min(1, "Select at least one color"),
   sizes: Yup.array().min(1, "Select at least one size"),
-  rating: Yup.number().required("Rating is required"),
   category: Yup.string().required("Category is required"),
+  sku: Yup.string().required("SKU is required"),
+  tags: Yup.string().required("Tags are required"), // comma separated string
   images: Yup.mixed()
     .test('fileType', 'Unsupported File Format', (val) => {
       if (!val || val.length === 0) return true
@@ -53,7 +54,8 @@ export default function ProductAddForm() {
             price: '',
             stock: '',
             category: '',
-            rating: '',
+            sku: '',
+            tags: '', // comma separated
             colors: [],
             sizes: [],
             images: [],
@@ -67,7 +69,17 @@ export default function ProductAddForm() {
               formData.append('price', values.price)
               formData.append('stock', values.stock)
               formData.append('category', values.category)
-              formData.append('rating', values.rating)
+          
+               formData.append('sku', values.sku)
+
+              // convert comma separated tags → array
+              const tagsArray = values.tags
+                .split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag !== '')
+
+              formData.append('tags', JSON.stringify(tagsArray))
+
               formData.append('colors', JSON.stringify(values.colors))
               formData.append('sizes', JSON.stringify(values.sizes))
               values.images.forEach(file => formData.append('images', file))
@@ -109,11 +121,12 @@ export default function ProductAddForm() {
                 {touched.stock && errors.stock && <p className='text-red-500'>{errors.stock}</p>}
               </div>
 
-              {/* Rating */}
+
+               {/* SKU */}
               <div className='grid gap-2'>
-                <Label htmlFor='rating'>Rating</Label>
-                <Input type='number' name='rating' value={values.rating} onChange={handleChange} placeholder='Rating'/>
-                {touched.rating && errors.rating && <p className='text-red-500'>{errors.rating}</p>}
+                <Label>SKU</Label>
+                <Input name='sku' value={values.sku} onChange={handleChange} />
+                {touched.sku && errors.sku && <p className='text-red-500'>{errors.sku}</p>}
               </div>
 
               {/* Category */}
@@ -121,6 +134,19 @@ export default function ProductAddForm() {
                 <Label htmlFor='category'>Category</Label>
                 <Input name='category' value={values.category} onChange={handleChange} placeholder='Category'/>
                 {touched.category && errors.category && <p className='text-red-500'>{errors.category}</p>}
+              </div>
+
+
+               {/* Tags */}
+              <div className='grid gap-2'>
+                <Label>Tags (comma separated)</Label>
+                <Input
+                  name='tags'
+                  value={values.tags}
+                  onChange={handleChange}
+                  placeholder='cotton, summer, men'
+                />
+                {touched.tags && errors.tags && <p className='text-red-500'>{errors.tags}</p>}
               </div>
 
               {/* Colors */}

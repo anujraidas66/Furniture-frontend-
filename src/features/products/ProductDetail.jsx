@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { useGetProductQuery } from './productApi';
+import { useGetProductQuery, useGetRelatedProductsQuery } from './productApi';
 import { base } from '../../app/mainApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCart } from '../cart/CartSlice';
@@ -10,6 +10,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { isLoading, error, data } = useGetProductQuery(id);
+    const { data: relatedData, isLoading: relatedLoading } = useGetRelatedProductsQuery(id);
   const [mainImage, setMainImage] = useState(null);
   const {user}  = useSelector(state => state.userSlice);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -107,6 +108,26 @@ export default function ProductDetail() {
           ))}
         </div>
 
+
+      {/* SKU */}
+<p className='text-zinc-500'>
+  <span className='font-semibold'>SKU:</span> {data.product.sku}
+</p>
+
+{/* Tags */}
+<div className='flex flex-wrap gap-2'>
+  <span className='font-semibold text-zinc-500'>Tags:</span>
+  {data.product.tags?.map((tag, idx) => (
+    <span
+      key={idx}
+      className='bg-gray-200 text-sm px-2 py-1 rounded'
+    >
+      {tag}
+    </span>
+  ))}
+</div>
+
+
         {/* Quantity */}
         <div className="flex items-center gap-3">
           <span className="font-semibold">Quantity:</span>
@@ -127,16 +148,57 @@ export default function ProductDetail() {
 
         {/* Add to Cart */}
         <button 
-        disabled={user.role === 'admin'}
+        disabled={user?.role === 'admin'}
           onClick={handleAddToCart}
           className="bg-yellow-400 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transition"
         >
           Add to Cart
         </button>
       </div>
+
+ {/* Related Products */}
+<div className="mt-10">
+  <h3 className="text-xl font-bold mb-4">Related Products</h3>
+
+  {relatedLoading ? (
+    <p>Loading related products...</p>
+  ) : relatedData?.products?.length === 0 ? (
+    <p>No related products found.</p>
+  ) : (
+    <>
+      {/* Grid of related products */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {relatedData.products.map((item) => (
+          <div key={item._id} className="border rounded p-2">
+            <img
+              src={`${base}/${item.image[0]}`}
+              alt={item.title}
+              className="w-full h-40 object-cover rounded"
+            />
+            <h4 className="mt-2 font-semibold">{item.title}</h4>
+            <p className="text-yellow-700">Rs. {item.price}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Centered "View More" button */}
+      <div className="flex justify-center mt-4">
+        <a
+          href="/shop"
+          className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+        >
+          View More
+        </a>
+      </div>
+    </>
+  )}
+</div>
+
+
     </div>
   );
 }
+
 
 
 

@@ -18,7 +18,8 @@ const valSchema = Yup.object({
   price: Yup.number().required("Price is required"),
   stock: Yup.number().required("Stock is required"),
   category: Yup.string().required("Category is required"),
-  rating: Yup.number().required("Rating is required"),
+  sku: Yup.string().required("SKU is required"),
+  tags: Yup.string().required("Tags are required"),
 })
 
 export default function ProductEditForm({ product }) {
@@ -40,7 +41,8 @@ export default function ProductEditForm({ product }) {
             price: product.price,
             stock: product.stock,
             category: product.category,
-            rating: product.rating,
+            sku: product.sku || '',
+            tags: product.tags ? product.tags.join(', ') : '',
             colors: product.colors || [],
             sizes: product.sizes || [],
             images: [],
@@ -54,7 +56,17 @@ export default function ProductEditForm({ product }) {
               formData.append('price', values.price)
               formData.append('stock', values.stock)
               formData.append('category', values.category)
-              formData.append('rating', values.rating)
+
+               formData.append('sku', values.sku)
+
+              // convert comma separated → array
+              const tagsArray = values.tags
+                .split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag !== '')
+
+              formData.append('tags', JSON.stringify(tagsArray))
+
               formData.append('colors', JSON.stringify(values.colors))
               formData.append('sizes', JSON.stringify(values.sizes))
               values.images.forEach(f => formData.append('images', f))
@@ -90,14 +102,27 @@ export default function ProductEditForm({ product }) {
                 <Input type="number" name="stock" value={values.stock} onChange={handleChange}/>
               </div>
 
+
+               {/* SKU */}
               <div className="grid gap-2">
-                <Label>Rating</Label>
-                <Input type="number" name="rating" value={values.rating} onChange={handleChange}/>
+                <Label>SKU</Label>
+                <Input name="sku" value={values.sku} onChange={handleChange} />
               </div>
 
               <div className="grid gap-2">
                 <Label>Category</Label>
                 <Input name="category" value={values.category} onChange={handleChange}/>
+              </div>
+
+               {/* Tags */}
+              <div className="grid gap-2">
+                <Label>Tags (comma separated)</Label>
+                <Input
+                  name="tags"
+                  value={values.tags}
+                  onChange={handleChange}
+                  placeholder="cotton, summer, men"
+                />
               </div>
 
               <div className="grid gap-2">
