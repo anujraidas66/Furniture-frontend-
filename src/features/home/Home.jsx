@@ -1,3 +1,37 @@
+export default function Home() {
+  return (
+    <div className="relative w-full max-w-[1440px] h-[900px] mx-auto bg-amber-100 flex items-center justify-start overflow-hidden">
+
+      {/* Left Text Section */}
+      <div className="w-96 relative ml-24">
+        <h1 className="text-black text-6xl font-medium font-['Poppins']">
+          Rocket Single Seater
+        </h1>
+        <h2 className="mt-8 text-black text-2xl font-medium font-['Poppins']">
+          Shop Now
+        </h2>
+        <div className="mt-4 w-32 h-0 outline outline-2 outline-black outline-offset-[-1px]" />
+      </div>
+
+      {/* Right Image Section */}
+      <div className="flex-1 relative">
+        <img
+          src="./image/sofa1.png"
+          alt="Rocket Furniture"
+          className="absolute right-0 top-0 h-full w-auto origin-top-left rotate-180 shadow-[0_28px_30px_0_rgba(0,0,0,0.10)]"
+        />
+      </div>
+      
+    </div>
+  );
+}
+
+
+
+
+
+
+
 
 // export default function Home(){
 //   return (
@@ -80,10 +114,4 @@
 
 
 
-export default function Home() {
-  return (
-    <div>
-      <h1>Home page</h1>
-    </div>
-  )
-}
+

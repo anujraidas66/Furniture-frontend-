@@ -5,6 +5,10 @@ import { FaCartArrowDown } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { useState } from "react";
 
+// Font Awesome imports
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
+
 export default function Header() {
   const { user } = useSelector((state) => state.userSlice);
   const { carts } = useSelector((state) => state.cartSlice);
@@ -17,7 +21,6 @@ export default function Header() {
   // When user presses Enter in search box
   const handleSearchKey = (e) => {
     if (e.key === "Enter") {
-      // Navigate to /shop with search query
       const query = new URLSearchParams({ search: searchTerm });
       navigate(`/shop?${query.toString()}`);
     }
@@ -28,7 +31,7 @@ export default function Header() {
       <div className="flex items-center justify-between px-10">
 
         {/* Center Menu */}
-        <div className="flex gap-10 mx-auto font-medium">
+        <div className="flex gap-6 font-medium">
           <NavLink to="/" className="text-black">Home</NavLink>
           <NavLink to="/shop" className="text-black">Shop</NavLink>
           <NavLink to="/account" className="text-black">Account</NavLink>
@@ -44,11 +47,15 @@ export default function Header() {
               )}
             </NavLink>
           )}
+
+          {/* Wishlist / Heart Icon */}
+          <NavLink to="/wishlist" className="text-black">
+            <FontAwesomeIcon icon={farHeart} className="text-xl hover:text-red-500 transition-colors" />
+          </NavLink>
         </div>
 
         {/* Right Section */}
         <div className="flex items-center gap-6">
-          {/* Search Input */}
           <input
             type="text"
             placeholder="Search products..."

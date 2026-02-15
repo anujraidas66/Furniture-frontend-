@@ -7,9 +7,9 @@ export default function RootLayOut() {
         <>
         <Header/>
        <CartDrawer/>
-        <main className='p-5'>
+  
          <Outlet/>
-        </main>
+     
             
         </>
     )
