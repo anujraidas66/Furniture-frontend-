@@ -1,43 +1,40 @@
-
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import DropDownProfile from "./DropDownProfile";
 import { FaCartArrowDown } from "react-icons/fa";
 import { Button } from "./ui/button";
+import { useState } from "react";
 
 export default function Header() {
   const { user } = useSelector((state) => state.userSlice);
   const { carts } = useSelector((state) => state.cartSlice);
   const totalQty = carts.reduce((sum, item) => sum + item.qty, 0);
-
-  // Show cart for guests and normal users, hide only for admin
   const showCart = user?.role !== "admin";
 
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // When user presses Enter in search box
+  const handleSearchKey = (e) => {
+    if (e.key === "Enter") {
+      // Navigate to /shop with search query
+      const query = new URLSearchParams({ search: searchTerm });
+      navigate(`/shop?${query.toString()}`);
+    }
+  };
+
   return (
-    <div className="bg-amber-100 w-full p-3 ">
+    <div className="bg-amber-100 w-full p-3">
       <div className="flex items-center justify-between px-10">
 
         {/* Center Menu */}
         <div className="flex gap-10 mx-auto font-medium">
-          <NavLink to="/" className="text-black">
-            Home
-          </NavLink>
+          <NavLink to="/" className="text-black">Home</NavLink>
+          <NavLink to="/shop" className="text-black">Shop</NavLink>
+          <NavLink to="/account" className="text-black">Account</NavLink>
+          {user?.role !== "admin" && <NavLink to="/contact" className="text-black">Contact</NavLink>}
 
-          <NavLink to="/shop" className="text-black">
-            Shop
-          </NavLink>
-
-          <NavLink to="/account" className="text-black">
-            Account
-          </NavLink>
-          
-{/* Show Contact only for normal users, not for admin */}
-  {user?.role !== "admin" && (
-    <NavLink to="/contact" className="text-black">Contact</NavLink>
-  )}
-
- 
-           {showCart && (
+          {showCart && (
             <NavLink to="/cart" className="relative text-black">
               <FaCartArrowDown size={25} />
               {totalQty > 0 && (
@@ -47,21 +44,18 @@ export default function Header() {
               )}
             </NavLink>
           )}
-
-          {/* {showCart && (
-            <NavLink to="/cart" className="text-black">
-              <FaCartArrowDown size={25} />
-            </NavLink>
-          )} */}
-          
         </div>
 
         {/* Right Section */}
         <div className="flex items-center gap-6">
+          {/* Search Input */}
           <input
             type="text"
-            placeholder="Search"
-            className="border bg-white rounded-md px-2 py-1 text-sm"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleSearchKey}
+            className="border bg-white rounded-md px-2 py-1 text-sm w-64"
           />
 
           {!user ? (
@@ -76,6 +70,7 @@ export default function Header() {
     </div>
   );
 }
+
 
 
 
