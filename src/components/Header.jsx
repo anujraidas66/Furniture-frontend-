@@ -4,8 +4,6 @@ import DropDownProfile from "./DropDownProfile";
 import { FaCartArrowDown } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { useState } from "react";
-
-// Font Awesome imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 
@@ -18,7 +16,6 @@ export default function Header() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // When user presses Enter in search box
   const handleSearchKey = (e) => {
     if (e.key === "Enter") {
       const query = new URLSearchParams({ search: searchTerm });
@@ -27,19 +24,45 @@ export default function Header() {
   };
 
   return (
-    <div className="bg-amber-100 w-full p-3">
-      <div className="flex items-center justify-between px-10">
+    <header className="fixed top-0 left-0 w-full bg-yellow-100 z-50 shadow-sm">
+      <div className="max-w-[1440px] mx-auto px-24 h-16 flex items-center justify-between">
 
-        {/* Center Menu */}
-        <div className="flex gap-6 font-medium">
-          <NavLink to="/" className="text-black">Home</NavLink>
-          <NavLink to="/shop" className="text-black">Shop</NavLink>
-          <NavLink to="/account" className="text-black">Account</NavLink>
-          {user?.role !== "admin" && <NavLink to="/contact" className="text-black">Contact</NavLink>}
+        {/* Navigation Links */}
+        <nav className="flex gap-10 text-base font-medium text-black">
+          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/">Home</NavLink>
+          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/shop">Shop</NavLink>
+          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/my-account">Account</NavLink>
+          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/product-blog">Blog</NavLink>
+          {user?.role !== "admin" && (
+            <NavLink className="text-black text-base font-medium font-['Poppins']" to="/contact">Contact</NavLink>
+          )}
+        </nav>
 
+        {/* Right Section */}
+        <div className="flex items-center gap-6">
+
+          {/* Search */}
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleSearchKey}
+            className="bg-white rounded-md px-3 py-1 text-sm w-52 outline-none "
+          />
+
+          {/* Wishlist */}
+          <NavLink to="/wishlist">
+            <FontAwesomeIcon
+              icon={farHeart}
+              className="text-xl hover:text-red-500 transition text-black text-base font-medium font-['Poppins']"
+            />
+          </NavLink>
+
+          {/* Cart */}
           {showCart && (
-            <NavLink to="/cart" className="relative text-black">
-              <FaCartArrowDown size={25} />
+            <NavLink to="/cart" className="relative">
+              <FaCartArrowDown size={22} />
               {totalQty > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                   {totalQty}
@@ -48,23 +71,7 @@ export default function Header() {
             </NavLink>
           )}
 
-          {/* Wishlist / Heart Icon */}
-          <NavLink to="/wishlist" className="text-black">
-            <FontAwesomeIcon icon={farHeart} className="text-xl hover:text-red-500 transition-colors" />
-          </NavLink>
-        </div>
-
-        {/* Right Section */}
-        <div className="flex items-center gap-6">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={handleSearchKey}
-            className="border bg-white rounded-md px-2 py-1 text-sm w-64"
-          />
-
+          {/* Login / Profile */}
           {!user ? (
             <NavLink to="/login">
               <Button variant="link">Login</Button>
@@ -74,10 +81,9 @@ export default function Header() {
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 }
-
 
 
 

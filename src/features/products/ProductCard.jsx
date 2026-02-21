@@ -23,16 +23,40 @@
 //     </div>
 //     )
 // }
-
 import { useNavigate } from "react-router";
 import { base } from "../../app/mainApi";
+import { useDispatch, useSelector } from "react-redux";
+import { FaHeart } from "react-icons/fa";
+import { toggleWishlist } from "../wishlist/WishListSlice";
 
 export default function ProductCard({ product, view = "grid" }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { wishlist } = useSelector(
+    (state) => state.wishlistSlice
+  );
 
   const imageSrc = Array.isArray(product.image)
     ? product.image[0]
     : product.image;
+
+  const isWishlisted = wishlist.some(
+    (item) => item.id === product._id
+  );
+
+  const handleWishlist = (e) => {
+    e.stopPropagation(); // prevent navigate
+
+    dispatch(
+      toggleWishlist({
+        id: product._id,
+        title: product.title,
+        price: product.price,
+        image: imageSrc,
+      })
+    );
+  };
 
   /* =========================================================
       LIST VIEW
@@ -41,8 +65,20 @@ export default function ProductCard({ product, view = "grid" }) {
     return (
       <div
         onClick={() => navigate(`/products/${product._id}`)}
-        className="flex gap-6 border-b pb-6 cursor-pointer group hover:bg-gray-50 transition"
+        className="flex gap-6 border-b pb-6 cursor-pointer group hover:bg-gray-50 transition relative"
       >
+        {/* Wishlist Button */}
+        <button
+          onClick={handleWishlist}
+          className="absolute top-4 right-4 bg-white p-2 rounded-full shadow"
+        >
+          <FaHeart
+            className={`${
+              isWishlisted ? "text-red-500" : "text-gray-400"
+            }`}
+          />
+        </button>
+
         {/* Image */}
         <div className="w-64 h-48 overflow-hidden rounded-lg bg-gray-100">
           <img
@@ -73,7 +109,7 @@ export default function ProductCard({ product, view = "grid" }) {
   }
 
   /* =========================================================
-      GRID VIEW (Default – Matches Your Screenshot)
+      GRID VIEW (Default)
   ========================================================== */
   return (
     <div
@@ -87,6 +123,18 @@ export default function ProductCard({ product, view = "grid" }) {
           alt={product.title}
           className="w-full h-64 object-cover transition duration-500 group-hover:scale-105"
         />
+
+        {/* Wishlist Button */}
+        <button
+          onClick={handleWishlist}
+          className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:scale-110 transition"
+        >
+          <FaHeart
+            className={`${
+              isWishlisted ? "text-red-500" : "text-gray-400"
+            }`}
+          />
+        </button>
       </div>
 
       {/* Info */}
@@ -102,6 +150,5 @@ export default function ProductCard({ product, view = "grid" }) {
     </div>
   );
 }
-
 
 

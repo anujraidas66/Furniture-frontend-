@@ -29,3 +29,17 @@ export const removeUserFromLocal = () => {
 
 
 
+/* ================= WISHLIST ================= */
+
+export const getWishlistFromLocal = () => {
+  const wishlist = localStorage.getItem("wishlist");
+  return wishlist ? JSON.parse(wishlist) : [];
+};
+
+export const setWishlistToLocal = (wishlist) => {
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+};
+
+
+
+

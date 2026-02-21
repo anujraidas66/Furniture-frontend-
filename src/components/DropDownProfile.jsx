@@ -1,5 +1,5 @@
 
-import { UserIcon, SettingsIcon, BellIcon, LogOutIcon, CreditCardIcon, ShoppingCart, LayoutDashboard, MailIcon } from 'lucide-react'
+import { UserIcon, SettingsIcon, BellIcon, LogOutIcon, CreditCardIcon, ShoppingCart, LayoutDashboard, MailIcon, SubscriptIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -48,6 +48,11 @@ const adminLists = [
   {
     icon:LayoutDashboard,
     property: 'Admin-panel'
+  },
+
+  {
+    icon:SubscriptIcon,
+    property: 'Admin-subscribers'
   },
 
  { icon: MailIcon, 
@@ -100,6 +105,10 @@ export default function DropDownProfile({user}) {
                    case 'My Orders':      // ✅ Navigate to user orders page
                     nav('/user-orders');
                     break;
+
+                    case 'Admin-subscribers':
+                      nav('/admin-subscribers')
+                      break
               }
             }
             }

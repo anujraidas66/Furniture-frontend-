@@ -1,12 +1,15 @@
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useDeleteContactMutation, useGetContactsQuery, useReplyContactMutation } from "../contact/contactApi";
+import {
+  useDeleteContactMutation,
+  useGetContactsQuery,
+  useReplyContactMutation,
+} from "../contact/contactApi";
 
 export default function AdminContactReply() {
-  const { user } = useSelector(state => state.userSlice);
+  const { user } = useSelector((state) => state.userSlice);
 
   const { data, isLoading } = useGetContactsQuery(user?.token);
   const [replyContact] = useReplyContactMutation();
@@ -15,31 +18,31 @@ export default function AdminContactReply() {
   const handleDelete = async (id) => {
     try {
       await deleteContact({ id, token: user?.token }).unwrap();
-      toast.success("Deleted successfully ✅");
+      toast.success("Message deleted successfully ✅");
     } catch (err) {
-      toast.error(err?.data?.message || "Delete failed ❌");
+      toast.error(err?.data?.message || "Failed to delete ❌");
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p className="text-center py-10 text-lg">Loading messages...</p>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">There is no any contact message</h1>
+    <div className="p-6 mt-24 max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Customer Messages</h1>
 
       {data?.contacts?.map((contact) => (
-        <div key={contact._id} className="border p-4 mb-4 rounded">
-          <p><strong>User:</strong> {contact.user?.username}</p>
-          <p><strong>Email:</strong> {contact.user?.email}</p>
-          <p><strong>Subject:</strong> {contact.subject}</p>
-          <p><strong>Message:</strong> {contact.message}</p>
+        <div key={contact._id} className="border p-6 mb-6 rounded-lg shadow-sm">
+          <p className="text-base"><strong>User:</strong> {contact.user?.username}</p>
+          <p className="text-base"><strong>Email:</strong> {contact.user?.email}</p>
+          <p className="text-base"><strong>Topic:</strong> {contact.subject}</p>
+          <p className="text-base"><strong>Message:</strong> {contact.message}</p>
 
           {contact.reply ? (
-            <div className="mt-2 p-2 bg-gray-100 rounded">
+            <div className="mt-4 p-4 bg-gray-100 rounded text-base">
               <strong>Reply:</strong> {contact.reply}
             </div>
           ) : (
-            <div className="mt-3">
+            <div className="mt-4">
               <Formik
                 initialValues={{ reply: "" }}
                 validationSchema={Yup.object({
@@ -47,28 +50,28 @@ export default function AdminContactReply() {
                     .trim()
                     .min(3, "Reply must be at least 3 characters")
                     .max(500, "Reply too long")
-                    .required("Reply is required")
+                    .required("Reply is required"),
                 })}
                 onSubmit={async (values, { resetForm }) => {
                   try {
                     await replyContact({
                       id: contact._id,
                       reply: values.reply,
-                      token: user?.token
+                      token: user?.token,
                     }).unwrap();
-                    toast.success("Reply sent ✅");
+                    toast.success("Reply sent successfully ✅");
                     resetForm();
                   } catch (err) {
-                    toast.error(err?.data?.message || "Reply failed ❌");
+                    toast.error(err?.data?.message || "Failed to send reply ❌");
                   }
                 }}
               >
-                <Form className="space-y-2">
+                <Form className="space-y-3">
                   <Field
                     as="textarea"
                     name="reply"
-                    placeholder="Write reply..."
-                    className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                    placeholder="Type your reply here..."
+                    className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-base"
                   />
                   <ErrorMessage
                     name="reply"
@@ -77,9 +80,9 @@ export default function AdminContactReply() {
                   />
                   <button
                     type="submit"
-                    className="bg-blue-500 text-white px-3 py-1 rounded"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-base"
                   >
-                    Send Reply
+                    Submit Reply
                   </button>
                 </Form>
               </Formik>
@@ -88,9 +91,9 @@ export default function AdminContactReply() {
 
           <button
             onClick={() => handleDelete(contact._id)}
-            className="bg-red-500 text-white px-3 py-1 rounded mt-3"
+            className="bg-red-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-red-700 transition text-base"
           >
-            Delete
+            Delete Message
           </button>
         </div>
       ))}

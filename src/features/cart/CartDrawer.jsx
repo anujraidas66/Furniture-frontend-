@@ -5,7 +5,7 @@ import { removeCart, toggleCart } from "./CartSlice";
 import { base } from "../../app/mainApi";
 
 export default function CartDrawer() {
-  const { carts, isOpen } = useSelector(state => state.cartSlice);
+  const { carts, isOpen } = useSelector((state) => state.cartSlice);
   const dispatch = useDispatch();
   const nav = useNavigate();
 
@@ -23,28 +23,38 @@ export default function CartDrawer() {
       <div
         className={`fixed top-0 right-0 w-96 h-full bg-white z-50 transform transition-transform ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        } font-['Poppins']`}
       >
+        {/* HEADER */}
         <div className="p-4 flex justify-between items-center border-b">
-          <h2 className="text-lg font-bold">Your Cart</h2>
-          <X className="cursor-pointer" onClick={() => dispatch(toggleCart(false))} />
+          <h2 className="text-2xl font-medium text-black">Your Cart</h2>
+          <X
+            className="cursor-pointer text-black"
+            onClick={() => dispatch(toggleCart(false))}
+          />
         </div>
 
+        {/* CART ITEMS */}
         <div className="p-4 space-y-4 overflow-y-auto h-[65%]">
-          {carts.map(item => {
+          {carts.map((item) => {
             const imgSrc = Array.isArray(item.image) ? item.image[0] : item.image;
 
             return (
-              <div key={`${item.id}-${item.color}-${item.size}`} className="flex gap-3 border p-2 rounded items-center">
+              <div
+                key={`${item.id}-${item.color}-${item.size}`}
+                className="flex gap-3 border p-2 rounded items-center"
+              >
                 <img
                   src={`${base}/${imgSrc}`}
                   alt={item.title}
                   className="w-16 h-16 object-cover rounded"
                 />
                 <div className="flex-1">
-                  <p className="font-semibold">{item.title}</p>
-                  <p>Qty: {item.qty}</p>
-                  <p>Rs. {item.price * item.qty}</p>
+                  <p className="text-black text-lg font-medium">{item.title}</p>
+                  <p className="text-neutral-400 text-base">Qty: {item.qty}</p>
+                  <p className="text-black text-base font-medium">
+                    Rs. {item.price * item.qty}
+                  </p>
                 </div>
                 <button
                   onClick={() =>
@@ -59,22 +69,27 @@ export default function CartDrawer() {
           })}
         </div>
 
+        {/* TOTAL & ACTIONS */}
         <div className="p-4 border-t space-y-3">
-          <p className="font-bold">Total: Rs. {total}</p>
+          <p className="text-black text-lg font-semibold">
+            Total: Rs. {total.toLocaleString()}.00
+          </p>
+
           <Link
             to="/cart"
             onClick={() => dispatch(toggleCart(false))}
-            className="block text-center bg-gray-200 py-2 rounded"
+            className="block text-center text-black text-base font-medium bg-gray-200 py-2 rounded hover:bg-gray-300 transition"
           >
             View Cart
           </Link>
+
           <button
             disabled={carts.length === 0}
             onClick={() => {
               dispatch(toggleCart(false));
               nav("/checkout");
             }}
-            className="w-full bg-yellow-400 py-2 rounded font-semibold"
+            className="w-full bg-yellow-400 py-2 rounded text-black font-semibold text-base hover:bg-yellow-500 transition"
           >
             Checkout
           </button>
@@ -83,7 +98,3 @@ export default function CartDrawer() {
     </>
   );
 }
-
-
-
-

@@ -14,6 +14,13 @@ import AdminOrders from './features/admin/AdminOrders.jsx';
 import UserOrder from './features/profile/UserOrder.jsx';
 import Contact from './features/contact/Contact.jsx';
 import AdminContactReply from './features/admin/AdminContactReply.jsx';
+import ProductBlog from './features/blog/ProductBlog.jsx';
+import WishlistProduct from './features/wishlist/WishListProduct.jsx';
+import MyAccount from './features/Authentication/MyAccount.jsx';
+import ResetPassword from './features/Authentication/ResetPassword.jsx';
+import ForgotPassword from './features/Authentication/ForgotPassword.jsx';
+import AdminSubscribers from './features/admin/AdminSubscribers.jsx';
+
 
 export default function App() {
     const router = createBrowserRouter([
@@ -27,13 +34,28 @@ export default function App() {
                 },
 
                 {
+                    path:'signup',
+                    element: <Signup/>
+                },
+
+                {
+                    path: 'my-account',
+                    element: <MyAccount/>
+                },
+
+                {
                     path:'login',
                     element: <Login/>
                 },
 
                 {
-                    path:'signup',
-                    element: <Signup/>
+                    path: 'forgot-password',
+                    element: <ForgotPassword/>
+                },
+
+                {
+                    path: 'reset-password/:token',
+                    element: <ResetPassword/>
                 },
 
                 {
@@ -62,6 +84,7 @@ export default function App() {
                 element:<Cart/>
                 },
 
+
                 {
                     path: 'checkOut',
                     element:<CheckOut/>
@@ -70,6 +93,11 @@ export default function App() {
                 {
                     path: 'admin-orders',
                     element:<AdminOrders/>
+                },
+
+                {
+                    path: 'admin-subscribers',
+                    element:<AdminSubscribers/>
                 },
 
                 {
@@ -87,6 +115,15 @@ export default function App() {
                     element:<AdminContactReply/>
                 },
 
+                {
+                    path: 'product-blog',
+                    element:<ProductBlog/>
+                },
+
+                {
+                    path: 'wishlist',
+                    element:<WishlistProduct/>
+                },
 
                 {
                 path:'shop',

@@ -108,7 +108,7 @@ export default function AdminOrders() {
   if (isLoading) return <p>Loading...</p>;
 
   return (
-    <div className="p-6">
+    <div className="p-6 mt-30 ">
       <h1 className="text-2xl font-bold mb-4">Admin Orders</h1>
 
       <table className="w-full border border-collapse">

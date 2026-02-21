@@ -81,7 +81,7 @@ export default function AdminPanel() {
   if(error) return <div>{error.message}</div>;
 
   return (
-    <div className='w-full'>
+    <div className='w-full my-30 mx-5'>
       <div className='mb-5'>
         <Button onClick={() => nav('/product-add')} className={'bg-blue-800'}>Add Product</Button>
       </div>

@@ -42,7 +42,7 @@ export default function ProductAddForm() {
   const [imagesPreview, setImagesPreview] = useState([])
 
   return (
-    <Card className='w-full max-w-3xl mt-4 mx-auto'>
+    <Card className='w-full max-w-3xl mt-30 mx-auto'>
       <CardHeader>
         <CardTitle>Create Product</CardTitle>
       </CardHeader>
@@ -60,6 +60,7 @@ export default function ProductAddForm() {
             sizes: [],
             images: [],
           }}
+          
           validationSchema={valSchema}
           onSubmit={async (values) => {
             try {
