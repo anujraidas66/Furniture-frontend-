@@ -14,6 +14,9 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import ReviewList from "../review/ReviewList";
+import ReviewForm from "../review/ReviewForm";
+
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -220,7 +223,25 @@ export default function ProductDetail() {
             </div>
           </>
         )}
+
+
+       <div className="col-span-2 mt-10 p-5 border-t">
+  <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+  {user ? (
+    <ReviewForm productId={id} />
+  ) : (
+    <p className="text-gray-600">
+      Please <Link to="/login" className="text-blue-500">login</Link> to add a review.
+    </p>
+  )}
+  <ReviewList productId={id} />
+</div>
+
+
       </div>
+
+
+  
     </div>
   );
 }

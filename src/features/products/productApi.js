@@ -70,6 +70,29 @@ const productApi = mainApi.injectEndpoints({
       providesTags: ["Product"],
     }),
 
+
+    addReview: builder.mutation({
+      query: ({ productId, rating, comment, token }) => ({
+        url: `/products/reviews/${productId}`,
+        method: "POST",
+        body: { rating, comment },
+        headers: { Authorization:  token },
+      }),
+      invalidatesTags: (result, error, { productId }) => [
+        { type: "Review", id: productId },
+      ],
+    }),
+
+    // Get Reviews
+    getReviews: builder.query({
+      query: (productId) => ({
+        url: `/products/reviews/${productId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, productId) => [
+        { type: "Review", id: productId },
+      ],
+    }),
   })
 });
 
@@ -81,4 +104,6 @@ export const {
   useRemoveProductMutation,
   useUpdateProductMutation,
   useGetRelatedProductsQuery,
+  useAddReviewMutation,
+  useGetReviewsQuery
 } = productApi;
