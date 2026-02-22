@@ -20,6 +20,7 @@ import MyAccount from './features/Authentication/MyAccount.jsx';
 import ResetPassword from './features/Authentication/ResetPassword.jsx';
 import ForgotPassword from './features/Authentication/ForgotPassword.jsx';
 import AdminSubscribers from './features/admin/AdminSubscribers.jsx';
+import About from './features/about/About.jsx';
 
 
 export default function App() {
@@ -82,6 +83,11 @@ export default function App() {
                 {
                 path:'cart',
                 element:<Cart/>
+                },
+
+                {
+                    path: 'about',
+                    element: <About/>
                 },
 
 

@@ -5,7 +5,7 @@ import { FaCartArrowDown } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
+import { faCircleUser, faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 
 export default function Header() {
   const { user } = useSelector((state) => state.userSlice);
@@ -25,21 +25,61 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 w-full bg-yellow-100 z-50 shadow-sm">
-      <div className="max-w-[1440px] mx-auto px-24 h-16 flex items-center justify-between">
-
+      <div className="max-w-[1440px] mx-auto  px-10 h-16 flex items-center justify-between">
+<div className="ml-96">
         {/* Navigation Links */}
-        <nav className="flex gap-10 text-base font-medium text-black">
-          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/">Home</NavLink>
-          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/shop">Shop</NavLink>
-          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/my-account">Account</NavLink>
-          <NavLink className="text-black text-base font-medium font-['Poppins']" to="/product-blog">Blog</NavLink>
+        <nav className="flex gap-10 items-center text-base font-medium text-black">
+          <NavLink
+            className="hover:text-gray-700 transition font-['Poppins']"
+            to="/"
+          >
+            Home
+          </NavLink>
+
+          <NavLink
+            className="hover:text-gray-700 transition font-['Poppins']"
+            to="/shop"
+          >
+            Shop
+          </NavLink>
+
+
+          <NavLink
+            className="hover:text-gray-700 transition font-['Poppins']"
+            to="/about"
+          >
+            About
+          </NavLink>
+
           {user?.role !== "admin" && (
-            <NavLink className="text-black text-base font-medium font-['Poppins']" to="/contact">Contact</NavLink>
+            <NavLink
+              className="hover:text-gray-700 transition font-['Poppins']"
+              to="/contact"
+            >
+              Contact
+            </NavLink>
           )}
+
+
+           <NavLink
+            className="hover:text-gray-700 transition font-['Poppins']"
+            to="/product-blog"
+          >
+            Blog
+          </NavLink>
         </nav>
+        </div>
 
         {/* Right Section */}
         <div className="flex items-center gap-6">
+
+          {/* Account Icon */}
+          <NavLink
+            to="/my-account"
+            className="text-2xl hover:text-gray-700 transition"
+          >
+            <FontAwesomeIcon icon={faCircleUser} />
+          </NavLink>
 
           {/* Search */}
           <input
@@ -48,14 +88,14 @@ export default function Header() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleSearchKey}
-            className="bg-white rounded-md px-3 py-1 text-sm w-52 outline-none "
+            className="bg-white rounded-md px-3 py-1 text-sm w-52 outline-none"
           />
 
           {/* Wishlist */}
           <NavLink to="/wishlist">
             <FontAwesomeIcon
               icon={farHeart}
-              className="text-xl hover:text-red-500 transition text-black text-base font-medium font-['Poppins']"
+              className="text-xl hover:text-red-500 transition"
             />
           </NavLink>
 
@@ -84,7 +124,6 @@ export default function Header() {
     </header>
   );
 }
-
 
 
 // import { NavLink } from "react-router-dom";
