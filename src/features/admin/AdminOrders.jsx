@@ -73,7 +73,7 @@ import {
   useGetOrderQuery,
   useUpdateOrderStatusMutation,
   useCancelOrderMutation,
-} from "../orders/OrderApi";
+} from "../orders/orderApi";
 
 export default function AdminOrders() {
   const { user } = useSelector((state) => state.userSlice);
