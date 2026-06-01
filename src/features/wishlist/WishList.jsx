@@ -72,7 +72,8 @@
 
 
 import { useSelector, useDispatch } from "react-redux";
-import { removeWishlist } from "../features/wishlist/WishlistSlice";
+import { removeWishlist } from "../features/wishlist/wishlistSlice";
+// import { removeWishlist } from "../features/wishlist/WishlistSlice";
 import { base } from "../app/mainApi";
 import { Link } from "react-router-dom";
 
