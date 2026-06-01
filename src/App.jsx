@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import RootLayOut from './components/RootLayout.jsx';
 import Home from './features/home/Home.jsx';
-import Login from './features/Authentication/login.jsx';
+// import Login from './features/Authentication/login.jsx';
+import Login from './features/Authentication/Login.jsx';
 import Signup from './features/Authentication/Signup.jsx';
 import Shop from './features/shop/Shop.jsx';
 import AdminPanel from './features/admin/AdminPanel.jsx';
