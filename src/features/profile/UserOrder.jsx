@@ -1,6 +1,6 @@
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { useGetOrderQuery, useCancelOrderMutation } from "../orders/OrderApi";
+import { useGetOrderQuery, useCancelOrderMutation } from "../orders/orderApi";
 
 export default function UserOrder() {
 
