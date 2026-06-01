@@ -36,7 +36,6 @@ export default function ProductAddForm() {
   const nav = useNavigate()
   const { user } = useSelector(state => state.userSlice)
   const [createProduct, { isLoading }] = useCreateProductMutation()
-
   const allColors = ['red', 'green', 'blue', 'yellow', 'black']
   const allSizes = ['small', 'medium', 'large', 'x-large']
   const [imagesPreview, setImagesPreview] = useState([])

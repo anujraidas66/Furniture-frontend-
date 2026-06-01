@@ -27,8 +27,6 @@ export const removeUserFromLocal = () => {
     localStorage.clear();
 }
 
-
-
 /* ================= WISHLIST ================= */
 
 export const getWishlistFromLocal = () => {

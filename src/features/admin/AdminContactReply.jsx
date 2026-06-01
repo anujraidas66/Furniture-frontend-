@@ -10,7 +10,6 @@ import {
 
 export default function AdminContactReply() {
   const { user } = useSelector((state) => state.userSlice);
-
   const { data, isLoading } = useGetContactsQuery(user?.token);
   const [replyContact] = useReplyContactMutation();
   const [deleteContact] = useDeleteContactMutation();
@@ -18,9 +17,9 @@ export default function AdminContactReply() {
   const handleDelete = async (id) => {
     try {
       await deleteContact({ id, token: user?.token }).unwrap();
-      toast.success("Message deleted successfully ✅");
+      toast.success("Message deleted successfully ");
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to delete ❌");
+      toast.error(err?.data?.message || "Failed to delete ");
     }
   };
 
@@ -59,10 +58,10 @@ export default function AdminContactReply() {
                       reply: values.reply,
                       token: user?.token,
                     }).unwrap();
-                    toast.success("Reply sent successfully ✅");
+                    toast.success("Reply sent successfully ");
                     resetForm();
                   } catch (err) {
-                    toast.error(err?.data?.message || "Failed to send reply ❌");
+                    toast.error(err?.data?.message || "Failed to send reply ");
                   }
                 }}
               >

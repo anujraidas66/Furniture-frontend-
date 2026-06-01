@@ -14,12 +14,16 @@ export const wishlistSlice = createSlice({
   reducers: {
     // Toggle wishlist (add/remove)
     toggleWishlist: (state, action) => {
+
+      //find item id according to action.payload
       const { id } = action.payload;
 
+      //find item id according to action.payload 
       const isExist = state.wishlist.find(
         (item) => item.id === id
       );
 
+      // if exist remove else add
       if (isExist) {
         state.wishlist = state.wishlist.filter(
           (item) => item.id !== id

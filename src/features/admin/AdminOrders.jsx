@@ -89,9 +89,9 @@ export default function AdminOrders() {
   const handleChange = async (orderId, status) => {
     try {
       await updateStatus({ orderId, status, token: user?.token }).unwrap();
-      toast.success("Order status updated ✅");
+      toast.success("Order status updated ");
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to update ❌");
+      toast.error(err?.data?.message || "Failed to update ");
     }
   };
 
@@ -99,9 +99,9 @@ export default function AdminOrders() {
   const handleCancel = async (orderId) => {
     try {
       await cancelOrder({ orderId, token: user?.token }).unwrap();
-      toast.success("Order canceled ✅");
+      toast.success("Order canceled ");
     } catch (err) {
-      toast.error(err?.data?.message || "Cancel failed ❌");
+      toast.error(err?.data?.message || "Cancel failed ");
     }
   };
 

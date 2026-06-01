@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useGetSubscribersQuery } from "../footer/footerApi";
 
 export default function AdminSubscribers() {

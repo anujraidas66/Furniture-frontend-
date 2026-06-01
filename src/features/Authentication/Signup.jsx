@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -25,14 +20,13 @@ const valSchema = Yup.object({
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
-
   const [registerUser, { isLoading }] = useUserRegisterMutation();
   const nav = useNavigate();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-100 to-indigo-50">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-r from-purple-100 to-indigo-50 px-4 py-8">
       <Card className="w-full max-w-md shadow-xl rounded-2xl border border-gray-200">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center px-6 pt-6">
           <CardTitle className="text-2xl font-bold text-gray-800">
             Create an Account
           </CardTitle>
@@ -41,7 +35,7 @@ export default function Signup() {
           </p>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           <Formik
             initialValues={{
               username: "",
@@ -93,34 +87,34 @@ export default function Signup() {
                 </div>
 
                 {/* Password */}
-               <div className="grid gap-2">
-  <Label className="text-gray-700">Password</Label>
+                <div className="grid gap-2">
+                  <Label className="text-gray-700">Password</Label>
 
-  {/* Input wrapper */}
-  <div className="relative">
-    <Input
-      name="password"
-      onChange={handleChange}
-      type={showPassword ? "text" : "password"}
-      placeholder="Enter your password"
-      className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 pr-12"
-    />
+                  <div className="relative">
+                    <Input
+                      name="password"
+                      onChange={handleChange}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 pr-12"
+                    />
 
-    <button
-      type="button"
-      onClick={() => setShowPassword(!showPassword)}
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-      aria-label={showPassword ? "Hide password" : "Show password"}
-    >
-      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-    </button>
-  </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
 
-  {errors.password && touched.password && (
-    <p className="text-red-500 text-sm">{errors.password}</p>
-  )}
-</div>
-
+                  {errors.password && touched.password && (
+                    <p className="text-red-500 text-sm">{errors.password}</p>
+                  )}
+                </div>
 
                 {/* Button */}
                 <Button

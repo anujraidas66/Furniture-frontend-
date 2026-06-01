@@ -50,7 +50,7 @@ import { mainApi } from "../../app/mainApi";
 const orderApi = mainApi.injectEndpoints({
   endpoints: (builder) => ({
 
-    // ✅ GET ALL ORDERS
+    // GET ALL ORDERS
     getOrder: builder.query({
       query: (token) => ({
         url: "/orders",
@@ -62,7 +62,7 @@ const orderApi = mainApi.injectEndpoints({
       providesTags: ["order"]
     }),
 
-    // ✅ CREATE ORDER
+    //  CREATE ORDER
     createOrder: builder.mutation({
       query: (data) => ({
         url: "/orders",
@@ -75,7 +75,7 @@ const orderApi = mainApi.injectEndpoints({
       invalidatesTags: ["order"]
     }),
 
-    // ✅ UPDATE ORDER STATUS (ADMIN)
+    // UPDATE ORDER STATUS (ADMIN)
     updateOrderStatus: builder.mutation({
       query: ({ orderId, status, token }) => ({
         url: `/orders/${orderId}/status`,
@@ -101,7 +101,7 @@ const orderApi = mainApi.injectEndpoints({
   })
 });
 
-// ✅ CORRECT EXPORTS
+
 export const {
   useGetOrderQuery,
   useCreateOrderMutation,

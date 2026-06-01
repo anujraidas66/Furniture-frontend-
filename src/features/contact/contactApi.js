@@ -3,7 +3,7 @@ import { mainApi } from "../../app/mainApi";
 const contactApi = mainApi.injectEndpoints({
   endpoints: (builder) => ({
 
-    // ✅ Create Contact (User)
+    //  Create Contact (User)
     createContact: builder.mutation({
       query: (data) => ({
         url: "/contacts",
@@ -16,7 +16,7 @@ const contactApi = mainApi.injectEndpoints({
       invalidatesTags: ["contact"]
     }),
 
-    // ✅ Get All Contacts (Admin)
+    // Get All Contacts (Admin)
     getContacts: builder.query({
       query: (token) => ({
         url: "/contacts",
@@ -28,7 +28,7 @@ const contactApi = mainApi.injectEndpoints({
       providesTags: ["contact"]
     }),
 
-    // ✅ Reply Contact (Admin)
+    //  Reply Contact (Admin)
     replyContact: builder.mutation({
       query: ({ id, reply, token }) => ({
         url: `/contacts/${id}/reply`,
@@ -41,7 +41,7 @@ const contactApi = mainApi.injectEndpoints({
       invalidatesTags: ["contact"]
     }),
 
-    // ✅ Delete Contact (Admin)
+    //  Delete Contact (Admin)
     deleteContact: builder.mutation({
       query: ({ id, token }) => ({
         url: `/contacts/${id}`,

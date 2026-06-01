@@ -70,7 +70,7 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { base } from "../../app/mainApi";
 import { Button } from "../../components/ui/button";
-import { EditIcon, Trash } from "lucide-react";
+import { EditIcon } from "lucide-react";
 import { useNavigate } from "react-router";
 import RemoveProduct from "./RemoveProduct";
 

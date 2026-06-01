@@ -20,10 +20,10 @@ export default function MyAccount() {
   const navigate = useNavigate();
 
   return (
-    <div className="font-['Poppins']">
+    <div className="font-['Poppins'] overflow-x-hidden">
 
       {/* ================= BANNER ================= */}
-      <div className="relative w-full mt-16 h-80 overflow-hidden">
+      <div className="relative w-full mt-16 h-60 sm:h-72 md:h-80 overflow-hidden">
         <img
           src="/image/checkout.jpg"
           alt="Banner"
@@ -31,12 +31,20 @@ export default function MyAccount() {
         />
         <div className="absolute inset-0 bg-white/40"></div>
 
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center">
-          <img src="/image/meubalhouse.png" alt="Logo" className="w-20 h-20 mb-4" />
-          <h1 className="text-5xl font-medium">My Account</h1>
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+          <img
+            src="/image/meubalhouse.png"
+            alt="Logo"
+            className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mb-4"
+          />
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-medium">
+            My Account
+          </h1>
 
-          <div className="flex items-center gap-3 mt-4 text-base">
-            <Link to="/" className="font-medium hover:underline">Home</Link>
+          <div className="flex items-center gap-3 mt-4 text-sm sm:text-base">
+            <Link to="/" className="font-medium hover:underline">
+              Home
+            </Link>
             <span>›</span>
             <span className="font-light">My Account</span>
           </div>
@@ -44,12 +52,14 @@ export default function MyAccount() {
       </div>
 
       {/* ================= ACCOUNT SECTION ================= */}
-      <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-4 gap-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-14">
 
-        {/* ================= LEFT: LOGIN FORM ================= */}
-        <div className="md:col-span-2 space-y-10">
-          <div className="bg-white p-10 rounded-lg shadow border border-gray-200">
-            <h2 className="text-3xl font-semibold mb-8">Log In</h2>
+        {/* LOGIN */}
+        <div className="md:col-span-2">
+          <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow border border-gray-200">
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8">
+              Log In
+            </h2>
 
             <Formik
               initialValues={{ email: "", password: "" }}
@@ -69,7 +79,9 @@ export default function MyAccount() {
                 <form onSubmit={handleSubmit} className="space-y-6">
 
                   <div>
-                    <label className="block mb-2 text-sm font-medium">Email</label>
+                    <label className="block mb-2 text-sm font-medium">
+                      Email
+                    </label>
                     <input
                       name="email"
                       type="email"
@@ -77,12 +89,16 @@ export default function MyAccount() {
                       className="w-full p-3 border rounded"
                     />
                     {errors.email && touched.email && (
-                      <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
 
                   <div className="relative">
-                    <label className="block mb-2 text-sm font-medium">Password</label>
+                    <label className="block mb-2 text-sm font-medium">
+                      Password
+                    </label>
                     <input
                       name="password"
                       type={showPassword ? "text" : "password"}
@@ -92,27 +108,34 @@ export default function MyAccount() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-[45px] text-gray-500"
+                      className="absolute right-3 top-11.25 text-gray-500"
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                     {errors.password && touched.password && (
-                      <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.password}
+                      </p>
                     )}
                   </div>
 
-                  <div className="flex justify-between text-sm">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-3 text-sm">
                     <label className="flex items-center gap-2">
                       <input type="checkbox" />
                       Remember me
                     </label>
-                    <NavLink to="/forgot-password" className="underline text-gray-600">Lost Your Password?</NavLink>
+                    <NavLink
+                      to="/forgot-password"
+                      className="underline text-gray-600"
+                    >
+                      Lost Your Password?
+                    </NavLink>
                   </div>
 
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="px-10 py-3 border rounded hover:bg-black hover:text-white transition"
+                    className="w-full sm:w-auto px-10 py-3 border rounded hover:bg-black hover:text-white transition"
                   >
                     {isLoading ? "Logging in..." : "Log In"}
                   </button>
@@ -122,13 +145,18 @@ export default function MyAccount() {
           </div>
         </div>
 
-        {/* ================= RIGHT: REGISTER INFO ================= */}
-        <div className="md:col-span-2 space-y-10">
-          <div className="bg-white p-10 rounded-lg shadow border border-gray-200">
-            <h2 className="text-3xl font-semibold mb-8">Register</h2>
+        {/* REGISTER */}
+        <div className="md:col-span-2">
+          <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow border border-gray-200">
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8">
+              Register
+            </h2>
+
             <div className="space-y-6">
               <div>
-                <label className="block mb-2 text-sm font-medium">Email address</label>
+                <label className="block mb-2 text-sm font-medium">
+                  Email address
+                </label>
                 <input type="email" className="w-full p-3 border rounded" />
               </div>
 
@@ -137,10 +165,15 @@ export default function MyAccount() {
               </p>
 
               <p className="text-sm text-gray-600 leading-relaxed">
-                Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <span className="font-semibold underline cursor-pointer">privacy policy</span>.
+                Your personal data will be used to support your experience
+                throughout this website, to manage access to your account,
+                and for other purposes described in our{" "}
+                <span className="font-semibold underline cursor-pointer">
+                  privacy policy
+                </span>.
               </p>
 
-              <button className="px-10 py-3 border rounded hover:bg-black hover:text-white transition">
+              <button className="w-full sm:w-auto px-10 py-3 border rounded hover:bg-black hover:text-white transition">
                 Register
               </button>
             </div>
@@ -150,22 +183,34 @@ export default function MyAccount() {
       </div>
 
       {/* ================= FEATURES ================= */}
-      <div className="bg-[#F9F1E7] py-20">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+      <div className="bg-[#F9F1E7] py-12 sm:py-16 md:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center md:text-left">
 
           <div>
-            <h3 className="text-3xl font-medium mb-4">Free Delivery</h3>
-            <p className="text-neutral-400 text-xl">For all orders over $50.</p>
+            <h3 className="text-2xl sm:text-3xl font-medium mb-4">
+              Free Delivery
+            </h3>
+            <p className="text-neutral-400 text-lg sm:text-xl">
+              For all orders over $50.
+            </p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-medium mb-4">90 Days Return</h3>
-            <p className="text-neutral-400 text-xl">If goods have problems.</p>
+            <h3 className="text-2xl sm:text-3xl font-medium mb-4">
+              90 Days Return
+            </h3>
+            <p className="text-neutral-400 text-lg sm:text-xl">
+              If goods have problems.
+            </p>
           </div>
 
           <div>
-            <h3 className="text-3xl font-medium mb-4">Secure Payment</h3>
-            <p className="text-neutral-400 text-xl">100% secure payment.</p>
+            <h3 className="text-2xl sm:text-3xl font-medium mb-4">
+              Secure Payment
+            </h3>
+            <p className="text-neutral-400 text-lg sm:text-xl">
+              100% secure payment.
+            </p>
           </div>
 
         </div>
@@ -174,5 +219,3 @@ export default function MyAccount() {
     </div>
   );
 }
-
-

@@ -2,10 +2,8 @@ import { Card, CardContent, CardHeader } from "../../components/ui/card";
 import { Skeleton } from "../../components/ui/skeleton";
 
 export default function ProductSkeleton() {
-    return (
-        <div>
-    <Card className="w-full max-w-xs">
-      
+  return (
+    <Card className="w-full">
       <CardContent>
         <Skeleton className="aspect-video w-full" />
       </CardContent>
@@ -17,6 +15,5 @@ export default function ProductSkeleton() {
         <Skeleton className="h-4 w-2/3" />
       </CardHeader>
     </Card>
-        </div>
-    )
+  );
 }
