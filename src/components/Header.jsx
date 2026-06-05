@@ -27,7 +27,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 w-full bg-yellow-100 z-50 shadow-sm">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 h-16 flex items-center justify-between">
+      <div className="max-w-360 mx-auto px-4 md:px-10 h-16 flex items-center justify-between">
 
         {/* Navigation Links - Desktop */}
         <nav className="hidden md:flex gap-10 items-center text-base font-medium text-black">

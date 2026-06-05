@@ -25,7 +25,7 @@ export default function Home() {
     <div className="pt-16"> {/* important because navbar is fixed */}
 
       {/* ================= HERO ================= */}
-      <section className="w-full bg-amber-200 flex justify-center">
+      <section className="w-full bg-yellow-100 flex justify-center border-b border-gray-400 ">
         <div className="max-w-360 w-full px-6 md:px-12 lg:px-24 py-20 flex flex-col md:flex-row items-center justify-between gap-12">
 
           <div className="text-center md:text-left">
@@ -44,13 +44,15 @@ export default function Home() {
           <img
             src="/image/sofa1.png"
             alt="Rocket"
-            className="w-full max-w-175 object-contain rotate-z-180 rotate-x-180"
+            className="w-full max-w-175 object-contain rotate-z-180 rotate-x-180 "
+
           />
         </div>
       </section>
+      
 
       {/* ================= FEATURED ================= */}
-      <section className="w-full bg-amber-100 py-20 flex justify-center">
+      <section className="w-full bg-amber-100 py-20 flex justify-center ">
         <div className="max-w-360 w-full px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-2 gap-16">
 
           {featuredProducts.map((product) => (
@@ -170,11 +172,11 @@ export default function Home() {
                 </p>
 
                 <Link
-                  to={`/product/${product._id}`}
-                  className="inline-block mt-3 text-sm font-semibold text-black border-b border-black hover:opacity-70 transition"
-                >
-                  Read More
-                </Link>
+  to="/product-blog"
+  className="inline-block mt-3 text-sm font-semibold text-black border-b border-black hover:opacity-70 transition"
+>
+  Read More
+</Link>
 
                 <div className="flex justify-center gap-6 mt-3 text-gray-500 text-sm">
                   <span>📅 {new Date(product.createdAt).toLocaleDateString()}</span>
