@@ -1,4 +1,4 @@
-// responisve code
+
 import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "../../features/products/productApi";
 import { base } from "../../app/mainApi";
